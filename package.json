@@ -18,7 +18,9 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "commitizen": "^4.3.0",
     "concurrently": "^8.2.2",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint-config-next": "^14.2.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.6.0",
@@ -39,7 +41,8 @@
     "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
     "wait-for-postgres": "node infra/scripts/wait-for-postgres.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "commit": "commitizen"
   },
   "repository": {
     "type": "git",
@@ -59,5 +62,10 @@
   "bugs": {
     "url": "https://github.com/Edpow/clone-tabnews/issues"
   },
-  "homepage": "https://github.com/Edpow/clone-tabnews#readme"
+  "homepage": "https://github.com/Edpow/clone-tabnews#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
