@@ -10,11 +10,13 @@ async function waitFormAllServices() {
     });
 
     async function fetchStatusPage() {
-      const response = await fetch("http://localhost:3000/api/v1/status");
-      const responseBody = await response.json();
+      await fetch("http://localhost:3000/api/v1/status");
     }
   }
 }
-export default {
+
+const orchestrator = {
   waitFormAllServices,
 };
+
+export default orchestrator;
