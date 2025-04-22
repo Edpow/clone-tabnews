@@ -2,8 +2,8 @@ import database from "infra/database.js";
 import { ValidationError } from "infra/errors.js";
 
 async function create(userInputValues) {
-  await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
+  await validateUniqueUsername(userInputValues.username);
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
 
