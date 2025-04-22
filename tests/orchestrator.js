@@ -1,5 +1,6 @@
 import retry from "async-retry";
 import database from "infra/database";
+import migrator from "models/migrator";
 
 async function waitFormAllServices() {
   await waitForWebServer();
@@ -22,9 +23,14 @@ async function clearDatabase() {
   );
 }
 
+async function applyPendingMigrations() {
+  await migrator.applyPendingMigrations();
+}
+
 const orchestrator = {
   waitFormAllServices,
   clearDatabase,
+  applyPendingMigrations,
 };
 
 export default orchestrator;
