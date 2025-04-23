@@ -34,7 +34,7 @@ describe("GET /api/v1/users/[username]", () => {
         id: responseBody2.id,
         username: "edpoW",
         email: "edpow@email.com",
-        password: "123456",
+        password: responseBody2.password,
         created_at: responseBody2.created_at,
         updated_at: responseBody2.updated_at,
       });
@@ -71,7 +71,7 @@ describe("GET /api/v1/users/[username]", () => {
         id: responseBody2.id,
         username: "edpoWCaseMismatch",
         email: "edpoWCaseMismatch@email.com",
-        password: "123456",
+        password: responseBody2.password,
         created_at: responseBody2.created_at,
         updated_at: responseBody2.updated_at,
       });
