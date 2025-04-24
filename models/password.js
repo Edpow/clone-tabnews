@@ -6,7 +6,6 @@ async function hash(password) {
 }
 
 async function compare(providedPassword, storedPassword) {
-  console.log(providedPassword, storedPassword);
   return await bcryptjs.compare(providedPassword, storedPassword);
 }
 
