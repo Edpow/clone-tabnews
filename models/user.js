@@ -9,10 +9,6 @@ async function create(userInputValues) {
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
-  async function hashPasswordInObject(userInputValues) {
-    const hashedPassword = await password.hash(userInputValues.password);
-    userInputValues.password = hashedPassword;
-  }
 
   async function runInsertQuery(userInputValues) {
     const results = await database.query({
@@ -104,10 +100,7 @@ async function findOneByUsername(username) {
 }
 
 async function update(username, userInputValues) {
-  console.log(username, userInputValues);
   const currentUser = await findOneByUsername(username);
-
-  console.log(currentUser);
 
   if ("username" in userInputValues) {
     if (username.toLowerCase() !== userInputValues.username.toLowerCase()) {
@@ -118,12 +111,57 @@ async function update(username, userInputValues) {
   if ("email" in userInputValues) {
     await validateUniqueEmail(userInputValues.email);
   }
+
+  if ("password" in userInputValues) {
+    await hashPasswordInObject(userInputValues);
+  }
+
+  const userNewValues = {
+    ...currentUser,
+    ...userInputValues,
+  };
+
+  const updatedUser = runUpdateQuery(userNewValues);
+
+  return updatedUser;
+
+  async function runUpdateQuery(userNewValues) {
+    const results = await database.query({
+      text: `
+      UPDATE
+        users
+      SET
+        username = $2,
+        email = $3,
+        password = $4,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+        *
+      `,
+      values: [
+        userNewValues.id,
+        userNewValues.username,
+        userNewValues.email,
+        userNewValues.password,
+      ],
+    });
+
+    return results.rows[0];
+  }
+}
+
+async function hashPasswordInObject(userInputValues) {
+  const hashedPassword = await password.hash(userInputValues.password);
+  userInputValues.password = hashedPassword;
 }
 
 const user = {
   create,
   findOneByUsername,
   update,
+  hashPasswordInObject,
 };
 
 export default user;
