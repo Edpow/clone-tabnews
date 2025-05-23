@@ -32,14 +32,14 @@ async function applyPendingMigrations() {
 async function createUser(userObject) {
   return await user.create({
     username:
-      userObject.username ||
+      userObject?.username ||
       faker.internet
         .username()
         .replace("_", "")
         .replace(".", "")
         .replace("-", ""),
-    email: userObject.email || faker.internet.email(),
-    password: userObject.password || "validpassword",
+    email: userObject?.email || faker.internet.email(),
+    password: userObject?.password || "validpassword",
   });
 }
 
