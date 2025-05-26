@@ -13,8 +13,6 @@ describe("POST /api/v1/sessions", () => {
         password: "senha-correta",
       });
 
-      const startTime = performance.now();
-
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
         headers: {
@@ -26,11 +24,7 @@ describe("POST /api/v1/sessions", () => {
         }),
       });
 
-      const endTime = performance.now();
-
       expect(response.status).toBe(401);
-
-      console.log(endTime - startTime);
 
       const responseBody = await response.json();
 
@@ -47,8 +41,6 @@ describe("POST /api/v1/sessions", () => {
         email: "email.correto@email.com",
       });
 
-      const startTime = performance.now();
-
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
         headers: {
@@ -60,11 +52,7 @@ describe("POST /api/v1/sessions", () => {
         }),
       });
 
-      const endTime = performance.now();
-
       expect(response.status).toBe(401);
-
-      console.log(endTime - startTime);
 
       const responseBody = await response.json();
 
@@ -79,8 +67,6 @@ describe("POST /api/v1/sessions", () => {
     test("With incorrect `email` but incorrect `password`", async () => {
       await orchestrator.createUser();
 
-      const startTime = performance.now();
-
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
         headers: {
@@ -92,11 +78,7 @@ describe("POST /api/v1/sessions", () => {
         }),
       });
 
-      const endTime = performance.now();
-
       expect(response.status).toBe(401);
-
-      console.log(endTime - startTime);
 
       const responseBody = await response.json();
 
