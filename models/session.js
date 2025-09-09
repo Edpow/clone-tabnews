@@ -1,4 +1,5 @@
 import database from "infra/database";
+import { UnauthorizedError } from "infra/errors";
 import crypto from "node:crypto";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 60 * 24 * 30 * 1000; // 30 days
@@ -25,8 +26,40 @@ async function create(userId) {
   }
 }
 
+async function findOneValidByToken(sessionToken) {
+  const foundSession = await runSelectQuery(sessionToken);
+  return foundSession;
+
+  async function runSelectQuery(sessionToken) {
+    const results = await database.query({
+      text: `SELECT
+              *
+            FROM
+              sessions
+            WHERE
+              token = $1
+              AND
+              expires_at > NOW()
+            LIMIT
+              1
+            ;`,
+      values: [sessionToken],
+    });
+
+    if (results.rowCount === 0) {
+      throw new UnauthorizedError({
+        message: "O Usuário não possui uma sessão ativa.",
+        action: "Verifique se o usuário está logado e tente novamente.",
+      });
+    }
+
+    return results.rows[0];
+  }
+}
+
 const session = {
   create,
+  findOneValidByToken,
   EXPIRATION_IN_MILLISECONDS,
 };
 
