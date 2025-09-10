@@ -37,6 +37,14 @@ describe("GET /api/v1/user", () => {
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      const renewedSessionObject = await session.findOneValidByToken(
+        sessionObject.token,
+      );
+
+      expect(renewedSessionObject.expires_at > sessionObject.expires_at).toBe(
+        true,
+      );
     });
 
     test("With noexistent session", async () => {
