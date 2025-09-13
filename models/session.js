@@ -61,7 +61,6 @@ async function findOneValidByToken(sessionToken) {
 async function renew(sessionId) {
   const expiresAt = new Date(Date.now() + EXPIRATION_IN_MILLISECONDS);
   const foundSession = await runQuery(sessionId);
-  console.log(foundSession);
   return foundSession;
 
   async function runQuery(sessionId) {
