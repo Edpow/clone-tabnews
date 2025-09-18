@@ -30,6 +30,16 @@ describe("DELETE /api/v1/sessions", () => {
         action: "Verifique se o usuário está logado e tente novamente.",
         status_code: 401,
       });
+
+      const parsedSetCookie = setCookieParser(response, { map: true });
+
+      expect(parsedSetCookie.session_id).toEqual({
+        name: "session_id",
+        value: "invalid",
+        path: "/",
+        httpOnly: true,
+        maxAge: -1,
+      });
     });
 
     test("With valid session", async () => {
@@ -123,6 +133,16 @@ describe("DELETE /api/v1/sessions", () => {
         message: "O Usuário não possui uma sessão ativa.",
         action: "Verifique se o usuário está logado e tente novamente.",
         status_code: 401,
+      });
+
+      const parsedSetCookie = setCookieParser(response, { map: true });
+
+      expect(parsedSetCookie.session_id).toEqual({
+        name: "session_id",
+        value: "invalid",
+        path: "/",
+        httpOnly: true,
+        maxAge: -1,
       });
     });
   });
