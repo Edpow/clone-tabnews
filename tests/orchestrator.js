@@ -22,7 +22,7 @@ async function waitFormAllServices() {
     }
   }
 
-    async function waitForEmailServer() {
+  async function waitForEmailServer() {
     return retry(fetchEmailPage, {
       retries: 100,
       maxTimeout: 1000,
@@ -63,16 +63,18 @@ async function createSession(userId) {
 }
 
 async function deleteAllEmails() {
-  await fetch(`${emailAPIURL}/messages`, {method: "DELETE"})
+  await fetch(`${emailAPIURL}/messages`, { method: "DELETE" });
 }
 
-async function getLastEmail(){
-const emailListResponse = await fetch(`${emailAPIURL}/messages`)
-const emailListResponseBody = await emailListResponse.json();
-const lastEmailItem = emailListResponseBody.pop();
-const lastEmailTextResponse= await fetch(`${emailAPIURL}/messages/${lastEmailItem.id}.plain`)
-const lastEmailTextResponseBody = await lastEmailTextResponse.text()
-return {...lastEmailItem, text: lastEmailTextResponseBody}
+async function getLastEmail() {
+  const emailListResponse = await fetch(`${emailAPIURL}/messages`);
+  const emailListResponseBody = await emailListResponse.json();
+  const lastEmailItem = emailListResponseBody.pop();
+  const lastEmailTextResponse = await fetch(
+    `${emailAPIURL}/messages/${lastEmailItem.id}.plain`,
+  );
+  const lastEmailTextResponseBody = await lastEmailTextResponse.text();
+  return { ...lastEmailItem, text: lastEmailTextResponseBody };
 }
 
 const orchestrator = {
@@ -82,7 +84,7 @@ const orchestrator = {
   createUser,
   createSession,
   deleteAllEmails,
-  getLastEmail
+  getLastEmail,
 };
 
 export default orchestrator;
