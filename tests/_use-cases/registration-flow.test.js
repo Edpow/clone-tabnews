@@ -39,7 +39,14 @@ describe("Use case: Registration Flow (all successful)", () => {
     });
   });
 
-  test("Receive activation email", async () => {});
+  test("Receive activation email", async () => {
+    const lastEmail = await orchestrator.getLastEmail();
+
+    expect(lastEmail.sender).toBe("<contato@email.com.br>");
+    expect(lastEmail.recipients[0]).toBe("<registration.flow@email.com>");
+    expect(lastEmail.subject).toBe("Ative seu cadastro!");
+    expect(lastEmail.text).toContain("RegistrationFlow");
+  });
 
   test("Activate account", async () => {});
 
