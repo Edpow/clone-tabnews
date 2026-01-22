@@ -25,7 +25,7 @@ async function create(userId) {
   }
 }
 
-async function findOneByUserId(userId) {
+async function findOneValidByUserId(userId) {
   const foundedToken = await runSelectQuery(userId);
   return foundedToken;
 
@@ -38,6 +38,10 @@ async function findOneByUserId(userId) {
         user_activation_tokens
       WHERE
         user_id=($1)
+      AND
+        expires_at > NOW()
+      AND
+        used_at IS NULL
       LIMIT
         1
       ;`,
@@ -65,7 +69,7 @@ Equipe RE7
 const activation = {
   sendEmailToUser,
   create,
-  findOneByUserId,
+  findOneValidByUserId,
 };
 
 export default activation;
