@@ -1,6 +1,7 @@
 import email from "infra/email.js";
 import database from "infra/database.js";
 import webserver from "infra/webserver";
+import user from "./user";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
@@ -51,6 +52,60 @@ async function findOneValidByUserId(userId) {
   }
 }
 
+async function findOneValidById(tokenId) {
+  const foundedToken = await runSelectQuery(tokenId);
+  return foundedToken;
+
+  async function runSelectQuery(tokenId) {
+    const results = await database.query({
+      text: `
+      SELECT 
+        *
+      FROM
+        user_activation_tokens
+      WHERE
+        id=($1)
+      AND
+        expires_at > NOW()
+      AND
+        used_at IS NULL
+      LIMIT
+        1
+      ;`,
+      values: [tokenId],
+    });
+    return results.rows[0];
+  }
+}
+
+async function markTokenAsUsed(tokenId) {
+  const foundedToken = await runUpdateQuery(tokenId);
+  return foundedToken;
+
+  async function runUpdateQuery(tokenId) {
+    const results = await database.query({
+      text: `
+      UPDATE 
+        user_activation_tokens
+      SET
+        used_at = timezone('utc', now()),
+        updated_at = timezone('utc', now())
+      WHERE
+        id=$1
+      RETURNING
+        *
+      ;`,
+      values: [tokenId],
+    });
+    return results.rows[0];
+  }
+}
+
+async function activateUserByUserId(userId) {
+  const activatedUser = await user.setFeatures(userId, ["create:session"]);
+  return activatedUser;
+}
+
 async function sendEmailToUser(user, activationToken) {
   await email.send({
     from: "FinTab <contato@email.com.br>",
@@ -70,6 +125,9 @@ const activation = {
   sendEmailToUser,
   create,
   findOneValidByUserId,
+  markTokenAsUsed,
+  activateUserByUserId,
+  findOneValidById,
 };
 
 export default activation;
