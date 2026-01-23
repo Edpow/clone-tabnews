@@ -91,8 +91,6 @@ function extractUUID(text) {
 }
 
 async function activateUser(user) {
-  const token = await activation.create(user.id);
-  await activation.markTokenAsUsed(token.id);
   return await activation.activateUserByUserId(user.id);
 }
 
