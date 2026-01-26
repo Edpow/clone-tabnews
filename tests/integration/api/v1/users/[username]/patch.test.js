@@ -430,6 +430,45 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
     });
 
+    test("With `user2` targeting `user1`", async () => {
+      await orchestrator.createUser({
+        username: "targetUser1",
+      });
+
+      const user2 = await orchestrator.createUser({
+        username: "targetUser2",
+      });
+
+      await orchestrator.activateUser(user2);
+      const sessionObject2 = await orchestrator.createSession(user2.id);
+
+      const response = await fetch(
+        "http://localhost:3000/api/v1/users/targetUser1",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionObject2.token}`,
+          },
+          body: JSON.stringify({
+            username: "targetUser3",
+          }),
+        },
+      );
+
+      expect(response.status).toBe(403);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        action:
+          "Verifique se você possui a feature necessário para realizar esta ação",
+        message: "Você não possui permissão para atualizar outro usuário.",
+        name: "ForbiddenError",
+        status_code: 403,
+      });
+    });
+
     test("With 'username' case mismatch", async () => {
       const user = await orchestrator.createUser({
         username: "user1DefaultMismatch",
