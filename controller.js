@@ -88,7 +88,6 @@ async function injectAnonymousOrUser(request, response, next) {
 function canRequest(feature) {
   return async (request, response, next) => {
     const userTryingToRequest = request.context.user;
-
     if (authorization.can(userTryingToRequest, feature)) {
       return next();
     }
