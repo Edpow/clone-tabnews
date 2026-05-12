@@ -25,9 +25,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(responseBody2).toEqual({
         id: responseBody2.id,
         username: "edpoW",
-        email: "edpow@email.com",
         features: ["read:activation_token"],
-        password: responseBody2.password,
         created_at: responseBody2.created_at,
         updated_at: responseBody2.updated_at,
       });
@@ -55,9 +53,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(responseBody2).toEqual({
         id: responseBody2.id,
         username: "edpoWCaseMismatch",
-        email: "edpoWCaseMismatch@email.com",
         features: ["read:activation_token"],
-        password: responseBody2.password,
         created_at: responseBody2.created_at,
         updated_at: responseBody2.updated_at,
       });

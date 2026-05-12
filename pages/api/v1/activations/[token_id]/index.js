@@ -1,6 +1,7 @@
 import { createRouter } from "next-connect";
 import controller from "controller";
 import activation from "models/activation";
+import authorization from "models/authorization";
 
 const router = createRouter();
 
@@ -11,6 +12,7 @@ router
 export default router.handler(controller.errorHandlers);
 
 async function patchHandler(request, response) {
+  const userTryingToUpdate = request.context.user;
   const activationToken = request.query.token_id;
 
   const validActivationToken =
@@ -22,5 +24,13 @@ async function patchHandler(request, response) {
     validActivationToken.id,
   );
 
-  response.status(200).json(usedActivationToken);
+  const secureOutput = authorization.filterOutput(
+    userTryingToUpdate,
+    "read:activation_token",
+    usedActivationToken,
+  );
+
+  console.log(secureOutput, usedActivationToken);
+
+  response.status(200).json(secureOutput);
 }
