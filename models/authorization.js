@@ -64,6 +64,16 @@ function filterOutput(user, feature, output) {
       expires_at: output.expires_at,
     };
   }
+
+  if (feature === "read:migration") {
+    return output.map((migration) => {
+      return {
+        path: migration.path,
+        name: migration.name,
+        timestamp: migration.timestamp,
+      };
+    });
+  }
 }
 
 const authorization = {
