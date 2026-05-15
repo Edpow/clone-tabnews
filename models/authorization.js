@@ -16,63 +16,82 @@ function can(user, feature, resource) {
   return authorized;
 }
 
-function filterOutput(user, feature, output) {
+function filterOutput(user, feature, resource) {
   if (feature === "read:user") {
     return {
-      id: output.id,
-      username: output.username,
-      features: output.features,
-      created_at: output.created_at,
-      updated_at: output.updated_at,
+      id: resource.id,
+      username: resource.username,
+      features: resource.features,
+      created_at: resource.created_at,
+      updated_at: resource.updated_at,
     };
   }
 
   if (feature === "read:user:self") {
-    if (user.id === output.id) {
+    if (user.id === resource.id) {
       return {
-        id: output.id,
-        username: output.username,
-        email: output.email,
-        features: output.features,
-        created_at: output.created_at,
-        updated_at: output.updated_at,
+        id: resource.id,
+        username: resource.username,
+        email: resource.email,
+        features: resource.features,
+        created_at: resource.created_at,
+        updated_at: resource.updated_at,
       };
     }
   }
 
   if (feature === "read:session") {
-    if (user.id === output.user_id) {
+    if (user.id === resource.user_id) {
       return {
-        id: output.id,
-        token: output.token,
-        user_id: output.user_id,
-        features: output.features,
-        created_at: output.created_at,
-        updated_at: output.updated_at,
-        expires_at: output.expires_at,
+        id: resource.id,
+        token: resource.token,
+        user_id: resource.user_id,
+        features: resource.features,
+        created_at: resource.created_at,
+        updated_at: resource.updated_at,
+        expires_at: resource.expires_at,
       };
     }
   }
 
   if (feature === "read:activation_token") {
     return {
-      id: output.id,
-      used_at: output.token,
-      user_id: output.user_id,
-      created_at: output.created_at,
-      updated_at: output.updated_at,
-      expires_at: output.expires_at,
+      id: resource.id,
+      used_at: resource.token,
+      user_id: resource.user_id,
+      created_at: resource.created_at,
+      updated_at: resource.updated_at,
+      expires_at: resource.expires_at,
     };
   }
 
   if (feature === "read:migration") {
-    return output.map((migration) => {
+    return resource.map((migration) => {
       return {
         path: migration.path,
         name: migration.name,
         timestamp: migration.timestamp,
       };
     });
+  }
+
+  if (feature === "read:status") {
+    const output = {
+      updated_at: resource.updated_at,
+      dependencies: {
+        database: {
+          max_connections: resource.dependencies.database.max_connections,
+          opened_connections: resource.dependencies.database.opened_connections,
+        },
+      },
+    };
+
+    if (can(user, "read:status:all")) {
+      output.dependencies.database.server_version =
+        resource.dependencies.database.server_version;
+    }
+
+    return output;
   }
 }
 
