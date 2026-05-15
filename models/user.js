@@ -237,7 +237,7 @@ async function setFeatures(userId, features) {
 }
 
 async function addFeatures(userId, features) {
-  const updatedUser = runUpdateQuery(userId, features);
+  const updatedUser = await runUpdateQuery(userId, features);
 
   return updatedUser;
 

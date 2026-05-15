@@ -25,9 +25,17 @@ async function getHandler(request, response) {
 }
 
 async function postHandler(request, response) {
+  const userTryingToGet = request.context.user;
   const migrateMigration = await migrator.applyPendingMigrations();
+
+  const secureOutput = authorization.filterOutput(
+    userTryingToGet,
+    "read:migration",
+    migrateMigration,
+  );
+
   if (migrateMigration.length > 0) {
-    return response.status(201).json(migrateMigration);
+    return response.status(201).json(secureOutput);
   }
-  return response.status(200).json(migrateMigration);
+  return response.status(200).json(secureOutput);
 }
