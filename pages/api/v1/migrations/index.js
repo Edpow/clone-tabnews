@@ -12,8 +12,8 @@ router.post(controller.canRequest("run:migration"), postHandler);
 export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
-  const pendingMigrations = await migrator.listPendingMigrations();
   const userTryingToGet = request.context.user;
+  const pendingMigrations = await migrator.listPendingMigrations();
 
   const secureOutput = authorization.filterOutput(
     userTryingToGet,

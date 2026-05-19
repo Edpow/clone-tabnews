@@ -1,4 +1,26 @@
+import { InternalServerError } from "infra/errors";
+
+const avaiableFeatures = [
+  "create:user",
+  "read:user",
+  "read:user:self",
+  "update:user",
+  "update:user:self",
+  "update:user:others",
+  "create:session",
+  "read:session",
+  "read:activation_token",
+  "create:migration",
+  "read:migration",
+  "run:migration",
+  "read:status",
+  "read:status:all",
+];
+
 function can(user, feature, resource) {
+  validateUser(user);
+  validateFeatures(feature);
+
   let authorized = false;
 
   if (user.features.includes(feature)) {
@@ -17,6 +39,10 @@ function can(user, feature, resource) {
 }
 
 function filterOutput(user, feature, resource) {
+  validateUser(user);
+  validateFeatures(feature);
+  validateResource(resource);
+
   if (feature === "read:user") {
     return {
       id: resource.id,
@@ -57,7 +83,7 @@ function filterOutput(user, feature, resource) {
   if (feature === "read:activation_token") {
     return {
       id: resource.id,
-      used_at: resource.token,
+      used_at: resource.used_at,
       user_id: resource.user_id,
       created_at: resource.created_at,
       updated_at: resource.updated_at,
@@ -95,6 +121,36 @@ function filterOutput(user, feature, resource) {
   }
 }
 
+function validateUser(user) {
+  if (!user || !user.features) {
+    throw new InternalServerError({
+      cause: "É necessário fornecer `user` no model `authorization",
+    });
+  }
+}
+
+function validateFeatures(feature) {
+  if (!feature || !avaiableFeatures.includes(feature)) {
+    throw new InternalServerError({
+      cause: "É necessário fornecer `features` no model `authorization",
+    });
+  }
+}
+
+function validateResource(resource) {
+  if (typeof resource !== "object") {
+    throw new InternalServerError({
+      cause:
+        "É necessário fornecer um objeto em `resource` no model `authorization",
+    });
+  }
+
+  if (!resource) {
+    throw new InternalServerError({
+      cause: "É necessário fornecer `resource` no model `authorization",
+    });
+  }
+}
 const authorization = {
   can,
   filterOutput,

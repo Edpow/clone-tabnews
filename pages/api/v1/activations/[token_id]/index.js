@@ -30,7 +30,5 @@ async function patchHandler(request, response) {
     usedActivationToken,
   );
 
-  console.log(secureOutput, usedActivationToken);
-
   response.status(200).json(secureOutput);
 }
