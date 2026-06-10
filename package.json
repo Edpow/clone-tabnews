@@ -52,6 +52,7 @@
     "lint:eslint:check": "next lint --dir .",
     "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migrations:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
+    "migrations:up:dry": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development --dry-run up",
     "prepare": "husky",
     "commit": "cz"
   },
