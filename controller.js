@@ -1,15 +1,15 @@
 import * as cookie from "cookie";
-import session from "models/session.js";
-import user from "models/user.js";
-import authorization from "models/authorization";
 import {
+  ForbiddenError,
   InternalServerError,
   MethodNotAllowedError,
   NotFoundError,
-  ValidationError,
   UnauthorizedError,
-  ForbiddenError,
+  ValidationError,
 } from "infra/errors";
+import authorization from "models/authorization";
+import session from "models/session.js";
+import user from "models/user.js";
 
 function onNoMatchHandler(request, response) {
   const publicErrorObject = new MethodNotAllowedError();
@@ -42,6 +42,7 @@ function setSessionCookie(token, response) {
     maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000,
     secure: process.env.NODE_ENV == "production",
     httpOnly: true,
+    sameSite: "lax",
   });
   response.setHeader("Set-Cookie", setCookie);
 }
