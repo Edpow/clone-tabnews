@@ -1,7 +1,8 @@
-import orchestrator from "tests/orchestrator.js";
-import { version as uuidVersion } from "uuid";
+import webserver from "infra/webserver";
 import password from "models/password";
 import user from "models/user";
+import orchestrator from "tests/orchestrator.js";
+import { version as uuidVersion } from "uuid";
 
 beforeAll(async () => {
   await orchestrator.waitFormAllServices();
@@ -12,7 +13,7 @@ beforeAll(async () => {
 describe("POST /api/v1/users", () => {
   describe("Anonymous user", () => {
     test("With unique and valid data", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/users", {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +58,7 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With duplicated email", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+      const response1 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +72,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(201);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+      const response2 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,25 +97,22 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With duplicated username", async () => {
-      const responseUsername = await fetch(
-        "http://localhost:3000/api/v1/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: "edpowUsername",
-            email: "edpowUsername@email.com",
-            password: "123456",
-          }),
+      const responseUsername = await fetch(`${webserver.origin}/api/v1/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          username: "edpowUsername",
+          email: "edpowUsername@email.com",
+          password: "123456",
+        }),
+      });
 
       expect(responseUsername.status).toBe(201);
 
       const responseUsername2 = await fetch(
-        "http://localhost:3000/api/v1/users",
+        `${webserver.origin}/api/v1/users`,
         {
           method: "POST",
           headers: {
@@ -145,11 +143,9 @@ describe("POST /api/v1/users", () => {
     test("With unique and valid data", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/users", {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,11 +173,9 @@ describe("POST /api/v1/users", () => {
     test("With duplicated email", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
+      const response1 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +190,7 @@ describe("POST /api/v1/users", () => {
 
       expect(response1.status).toBe(403);
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users", {
+      const response2 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -223,30 +217,25 @@ describe("POST /api/v1/users", () => {
     test("With duplicated username", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
-      const responseUsername = await fetch(
-        "http://localhost:3000/api/v1/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Cookie: `session_id=${userSessionObject.token}`,
-          },
-          body: JSON.stringify({
-            username: "edpowUsername",
-            email: "edpowUsername@email.com",
-            password: "123456",
-          }),
+      const responseUsername = await fetch(`${webserver.origin}/api/v1/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `session_id=${userSessionObject.token}`,
         },
-      );
+        body: JSON.stringify({
+          username: "edpowUsername",
+          email: "edpowUsername@email.com",
+          password: "123456",
+        }),
+      });
 
       expect(responseUsername.status).toBe(403);
 
       const responseUsername2 = await fetch(
-        "http://localhost:3000/api/v1/users",
+        `${webserver.origin}/api/v1/users`,
         {
           method: "POST",
           headers: {

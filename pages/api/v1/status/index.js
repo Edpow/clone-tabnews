@@ -1,12 +1,12 @@
-import { createRouter } from "next-connect";
-import database from "infra/database.js";
 import controller from "controller";
+import database from "infra/database.js";
 import authorization from "models/authorization";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
 router.use(controller.injectAnonymousOrUser);
-router.get(controller.canRequest("read:status"), status);
+router.get(status);
 
 export default router.handler(controller.errorHandlers);
 
@@ -39,5 +39,5 @@ async function status(request, response) {
     result,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }

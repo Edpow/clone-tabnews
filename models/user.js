@@ -1,5 +1,5 @@
 import database from "infra/database.js";
-import { ValidationError, NotFoundError } from "infra/errors.js";
+import { NotFoundError, ValidationError } from "infra/errors.js";
 import password from "models/password.js";
 
 async function create(userInputValues) {

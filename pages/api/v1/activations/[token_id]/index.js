@@ -1,7 +1,7 @@
-import { createRouter } from "next-connect";
 import controller from "controller";
 import activation from "models/activation";
 import authorization from "models/authorization";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -30,5 +30,5 @@ async function patchHandler(request, response) {
     usedActivationToken,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }

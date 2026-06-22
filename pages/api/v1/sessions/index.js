@@ -1,10 +1,10 @@
 import { ForbiddenError } from "infra/errors";
 
-import { createRouter } from "next-connect";
 import controller from "controller";
 import authentication from "models/authentication";
-import session from "models/session.js";
 import authorization from "models/authorization";
+import session from "models/session.js";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -30,7 +30,9 @@ async function postHandler(request, response) {
     });
   }
 
-  const newSession = await session.create(authenticatedUser.id);
+  console.log(authenticatedUser);
+
+  const newSession = await session.create(authenticatedUser);
 
   const secureOutput = authorization.filterOutput(
     authenticatedUser,

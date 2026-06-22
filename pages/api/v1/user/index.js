@@ -1,8 +1,8 @@
-import { createRouter } from "next-connect";
 import controller from "controller";
-import user from "models/user.js";
-import session from "models/session";
 import authorization from "models/authorization";
+import session from "models/session";
+import user from "models/user.js";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -31,5 +31,5 @@ async function getHandler(request, response) {
     foundedUser,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }
