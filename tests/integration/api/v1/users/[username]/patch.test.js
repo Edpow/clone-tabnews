@@ -363,6 +363,50 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(incorrectPaswordMatch).toBe(false);
     });
 
+    test("With new 'email'", async () => {
+      const createdUser = await orchestrator.createUser({
+        password: "123456",
+      });
+
+      await orchestrator.activateUser(createdUser);
+      const sessionObject = await orchestrator.createSession(createdUser);
+
+      const response = await fetch(
+        `http://localhost:3000/api/v1/users/${createdUser.username}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `session_id=${sessionObject.token}`,
+          },
+          body: JSON.stringify({
+            email: "newemail@newemail.com",
+          }),
+        },
+      );
+
+      expect(response.status).toBe(200);
+
+      const responseBody2 = await response.json();
+
+      expect(responseBody2).toEqual({
+        id: responseBody2.id,
+        username: createdUser.username,
+        features: ["create:session", "read:session", "update:user"],
+        created_at: responseBody2.created_at,
+        updated_at: responseBody2.updated_at,
+      });
+
+      expect(uuidVersion(responseBody2.id)).toBe(4);
+      expect(Date.parse(responseBody2.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody2.updated_at)).not.toBeNaN();
+      expect(responseBody2.updated_at > responseBody2.created_at).toBe(true);
+
+      const userInDatabase = await user.findOneByUsername(createdUser.username);
+
+      expect(userInDatabase.email).toBe("newemail@newemail.com");
+    });
+
     test("With non existent 'username'", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
