@@ -1,9 +1,9 @@
-import email from "infra/email.js";
 import database from "infra/database.js";
+import email from "infra/email.js";
+import { ForbiddenError, NotFoundError } from "infra/errors";
 import webserver from "infra/webserver";
-import user from "./user";
 import authorization from "models/authorization";
-import { NotFoundError, ForbiddenError } from "infra/errors";
+import user from "./user";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000; // 15 minutes
 
@@ -131,7 +131,7 @@ async function activateUserByUserId(userId) {
 
 async function sendEmailToUser(user, activationToken) {
   await email.send({
-    from: "FinTab <contato@email.com.br>",
+    from: "FinTab <contato@re7engenharia.eng.br>",
     to: user.email,
     subject: "Ative seu cadastro!",
     text: `${user.username}, clique no link abaixo para ativar sua conta.
