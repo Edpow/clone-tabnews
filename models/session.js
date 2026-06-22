@@ -4,10 +4,11 @@ import crypto from "node:crypto";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 60 * 24 * 30 * 1000; // 30 days
 
-async function create(userId) {
+async function create(userObject) {
+
   const token = crypto.randomBytes(48).toString("hex");
   const expiresAt = new Date(Date.now() + EXPIRATION_IN_MILLISECONDS);
-  const newSession = await runInsertQuery(token, userId, expiresAt);
+  const newSession = await runInsertQuery(token, userObject.id, expiresAt);
   return newSession;
 
   async function runInsertQuery(token, userId, expiresAt) {

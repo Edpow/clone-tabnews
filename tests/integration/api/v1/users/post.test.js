@@ -143,9 +143,7 @@ describe("POST /api/v1/users", () => {
     test("With unique and valid data", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
       const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
@@ -175,9 +173,7 @@ describe("POST /api/v1/users", () => {
     test("With duplicated email", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
       const response1 = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
@@ -221,9 +217,7 @@ describe("POST /api/v1/users", () => {
     test("With duplicated username", async () => {
       const createdUser = await orchestrator.createUser();
       await orchestrator.activateUser(createdUser);
-      const userSessionObject = await orchestrator.createSession(
-        createdUser.id,
-      );
+      const userSessionObject = await orchestrator.createSession(createdUser);
 
       const responseUsername = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
