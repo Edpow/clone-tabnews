@@ -3,21 +3,26 @@ import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitFormAllServices();
+  await orchestrator.clearDatabase();
+  await orchestrator.applyPendingMigrations();
 });
 
 describe("GET /api/v1/status", () => {
   describe("Anonymous user", () => {
     test("Retrieving current system status", async () => {
       const response = await fetch(`${webserver.origin}/api/v1/status`);
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(200);
 
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        action: "Verifique se o seu usuário possui a feture read:status",
-        message: "Você não possui permissão para executar esta ação",
-        name: "ForbiddenError",
-        status_code: 403,
+        dependencies: {
+          database: {
+            max_connections: 100,
+            opened_connections: 1,
+          },
+        },
+        updated_at: responseBody.updated_at,
       });
     });
   });
@@ -32,15 +37,18 @@ describe("GET /api/v1/status", () => {
           Cookie: `session_id=${userSessionObject.token}`,
         },
       });
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(200);
 
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        action: "Verifique se o seu usuário possui a feture read:status",
-        message: "Você não possui permissão para executar esta ação",
-        name: "ForbiddenError",
-        status_code: 403,
+        dependencies: {
+          database: {
+            max_connections: 100,
+            opened_connections: 1,
+          },
+        },
+        updated_at: responseBody.updated_at,
       });
     });
   });

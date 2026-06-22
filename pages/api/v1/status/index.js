@@ -6,7 +6,7 @@ import { createRouter } from "next-connect";
 const router = createRouter();
 
 router.use(controller.injectAnonymousOrUser);
-router.get(controller.canRequest("read:status"), status);
+router.get(status);
 
 export default router.handler(controller.errorHandlers);
 
