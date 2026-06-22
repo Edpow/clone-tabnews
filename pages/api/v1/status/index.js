@@ -1,7 +1,7 @@
-import { createRouter } from "next-connect";
-import database from "infra/database.js";
 import controller from "controller";
+import database from "infra/database.js";
 import authorization from "models/authorization";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -39,5 +39,5 @@ async function status(request, response) {
     result,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }

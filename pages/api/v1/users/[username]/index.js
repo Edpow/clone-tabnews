@@ -1,8 +1,8 @@
-import { createRouter } from "next-connect";
 import controller from "controller";
-import user from "models/user.js";
 import { ForbiddenError } from "infra/errors";
 import authorization from "models/authorization";
+import user from "models/user.js";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -23,7 +23,7 @@ async function getHandler(request, response) {
     foundedUser,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }
 async function patchHandler(request, response) {
   const username = request.query.username;
@@ -48,5 +48,5 @@ async function patchHandler(request, response) {
     updatedUser,
   );
 
-  response.status(200).json(secureOutput);
+  return response.status(200).json(secureOutput);
 }

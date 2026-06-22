@@ -1,8 +1,8 @@
-import { createRouter } from "next-connect";
 import controller from "controller";
-import user from "models/user.js";
 import activation from "models/activation";
 import authorization from "models/authorization";
+import user from "models/user.js";
+import { createRouter } from "next-connect";
 
 const router = createRouter();
 
@@ -25,5 +25,5 @@ async function postHandler(request, response) {
     newUser,
   );
 
-  response.status(201).json(secureOutput);
+  return response.status(201).json(secureOutput);
 }
