@@ -1,10 +1,11 @@
+import { faker } from "@faker-js/faker";
 import retry from "async-retry";
 import database from "infra/database";
-import migrator from "models/migrator";
-import user from "models/user";
-import { faker } from "@faker-js/faker";
-import session from "models/session";
+import webserver from "infra/webserver";
 import activation from "models/activation";
+import migrator from "models/migrator";
+import session from "models/session";
+import user from "models/user";
 
 const emailAPIURL = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -19,7 +20,7 @@ async function waitFormAllServices() {
     });
 
     async function fetchStatusPage() {
-      await fetch("http://localhost:3000/api/v1/status");
+      await fetch(`${webserver.origin}/api/v1/status`);
     }
   }
 

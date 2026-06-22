@@ -1,7 +1,8 @@
+import webserver from "infra/webserver";
 import password from "models/password";
+import user from "models/user";
 import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
-import user from "models/user";
 
 beforeAll(async () => {
   await orchestrator.waitFormAllServices();
@@ -21,7 +22,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       await orchestrator.activateUser(createdUser);
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/uniqueUser1",
+        `${webserver.origin}/api/v1/users/uniqueUser1`,
         {
           method: "PATCH",
           headers: {
@@ -53,7 +54,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/uniqueEmail1",
+        `${webserver.origin}/api/v1/users/uniqueEmail1`,
         {
           method: "PATCH",
           headers: {
@@ -109,7 +110,7 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With non existent 'username'", async () => {
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/usuario2",
+        `${webserver.origin}/api/v1/users/usuario2`,
         { method: "PATCH" },
       );
 
@@ -134,7 +135,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         username: "user2",
       });
 
-      const response = await fetch("http://localhost:3000/api/v1/users/user2", {
+      const response = await fetch(`${webserver.origin}/api/v1/users/user2`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -162,7 +163,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/user1Mismatch",
+        `${webserver.origin}/api/v1/users/user1Mismatch`,
         {
           method: "PATCH",
           headers: {
@@ -234,7 +235,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/defaultUser",
+        `${webserver.origin}/api/v1/users/defaultUser`,
         {
           method: "PATCH",
           headers: {
@@ -276,7 +277,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(user.id);
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/uniqueEmailUsername",
+        `${webserver.origin}/api/v1/users/uniqueEmailUsername`,
         {
           method: "PATCH",
           headers: {
@@ -368,7 +369,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/usuario2",
+        `${webserver.origin}/api/v1/users/usuario2`,
         {
           method: "PATCH",
           headers: { Cookie: `session_id=${sessionObject.token}` },
@@ -399,7 +400,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject2 = await orchestrator.createSession(user2.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/duplicatedUser2",
+        `${webserver.origin}/api/v1/users/duplicatedUser2`,
         {
           method: "PATCH",
           headers: {
@@ -437,7 +438,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject2 = await orchestrator.createSession(user2.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/targetUser1",
+        `${webserver.origin}/api/v1/users/targetUser1`,
         {
           method: "PATCH",
           headers: {
@@ -472,7 +473,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(user.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/user1DefaultMismatch",
+        `${webserver.origin}/api/v1/users/user1DefaultMismatch`,
         {
           method: "PATCH",
           headers: {

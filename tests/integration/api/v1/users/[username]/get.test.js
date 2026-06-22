@@ -1,3 +1,4 @@
+import webserver from "infra/webserver";
 import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
 
@@ -16,7 +17,7 @@ describe("GET /api/v1/users/[username]", () => {
         password: "123456",
       });
 
-      const response2 = await fetch("http://localhost:3000/api/v1/users/edpoW");
+      const response2 = await fetch(`${webserver.origin}/api/v1/users/edpoW`);
 
       expect(response2.status).toBe(200);
 
@@ -43,7 +44,7 @@ describe("GET /api/v1/users/[username]", () => {
       });
 
       const response2 = await fetch(
-        "http://localhost:3000/api/v1/users/edpowcasemismatch",
+        `${webserver.origin}/api/v1/users/edpowcasemismatch`,
       );
 
       expect(response2.status).toBe(200);
@@ -64,9 +65,7 @@ describe("GET /api/v1/users/[username]", () => {
     });
 
     test("With non existent user", async () => {
-      const response = await fetch(
-        "http://localhost:3000/api/v1/users/usuario2",
-      );
+      const response = await fetch(`${webserver.origin}/api/v1/users/usuario2`);
 
       expect(response.status).toBe(404);
 
