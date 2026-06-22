@@ -131,7 +131,7 @@ async function activateUserByUserId(userId) {
 
 async function sendEmailToUser(user, activationToken) {
   await email.send({
-    from: "FinTab <contato@re7engenharia.eng.br>",
+    from: "RE7 Engenharia <contato@re7engenharia.eng.br>",
     to: user.email,
     subject: "Ative seu cadastro!",
     text: `${user.username}, clique no link abaixo para ativar sua conta.
