@@ -1,3 +1,4 @@
+import { Button } from "@primer/react";
 import { useState } from "react";
 
 function RegisterPage() {
@@ -58,6 +59,8 @@ function RegisterPage() {
           />
         </div>
         <button type="submit">Criar cadastro</button>
+        <Button>Criar cadastro</Button>
+        <Button variant="primary">Criar cadastro</Button>
       </form>
     </>
   );
