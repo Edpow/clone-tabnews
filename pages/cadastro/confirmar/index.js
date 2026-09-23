@@ -1,3 +1,9 @@
+import DefaultLayout from "interface/DefaultLayout";
+
 export default function ConfimRegisterPage() {
-  return <h1>Confira seu email</h1>;
+  return (
+    <DefaultLayout>
+      <h1>Confira seu email</h1>
+    </DefaultLayout>
+  );
 }
