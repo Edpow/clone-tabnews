@@ -1,8 +1,15 @@
 import { Header, PageLayout, Text } from "@primer/react";
+import Head from "next/head";
 
-export default function DefaultLayout({ children }) {
+export default function DefaultLayout({ children, metadata = {} }) {
   return (
     <>
+      <Head>
+        <title>{metadata?.title ? `${metadata?.title} · Fintab` : ""}</title>
+        {metadata.description && (
+          <meta name="description" content={metadata.description} />
+        )}
+      </Head>
       <Header>
         <Header.Item full>
           <Header.Link href="/">TabNews</Header.Link>
