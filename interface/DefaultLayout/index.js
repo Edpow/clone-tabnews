@@ -1,7 +1,11 @@
 import { Header, PageLayout, Text } from "@primer/react";
 import Head from "next/head";
 
-export default function DefaultLayout({ children, metadata = {} }) {
+export default function DefaultLayout({
+  children,
+  metadata = {},
+  contentWidth,
+}) {
   return (
     <>
       <Head>
@@ -23,7 +27,7 @@ export default function DefaultLayout({ children, metadata = {} }) {
       </Header>
 
       <PageLayout>
-        <PageLayout.Content>{children}</PageLayout.Content>
+        <PageLayout.Content width={contentWidth}>{children}</PageLayout.Content>
         <PageLayout.Footer divider="line">
           <Text size="small">© {new Date().getFullYear()} TabNews</Text>
         </PageLayout.Footer>

@@ -1,8 +1,23 @@
-import { Button } from "@primer/react";
+import { Button, FormControl, Stack, TextInput } from "@primer/react";
 import DefaultLayout from "interface/DefaultLayout";
 import { useState } from "react";
 
 function RegisterPage() {
+  return (
+    <DefaultLayout
+      contentWidth="small"
+      metadata={{
+        title: "Cadastro",
+        description: "Crie sua conta de forma gratuita.",
+      }}
+    >
+      <h1>Cadastro</h1>
+      <RegisterForm />
+    </DefaultLayout>
+  );
+}
+
+function RegisterForm() {
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,49 +39,50 @@ function RegisterPage() {
       location.href = "/cadastro/confirmar";
     }
   };
-
   return (
-    <DefaultLayout
-      metadata={{
-        title: "Cadastro",
-        description: "Crie sua conta de forma gratuita.",
-      }}
-    >
-      <h1>Cadastro</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          Usuário:
-          <input
+    <form onSubmit={handleSubmit}>
+      <Stack gap={"cozy"}>
+        <FormControl>
+          <FormControl.Label>Usuário</FormControl.Label>
+          <TextInput
+            block
             type="text"
             value={username}
             onChange={(e) => {
               setUserName(e.target.value);
             }}
           />
-        </div>
-        <div>
-          Email:
-          <input
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Email</FormControl.Label>
+          <TextInput
+            block
             type="email"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
-        </div>
-        <div>
-          Senha:
-          <input
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Senha</FormControl.Label>
+          <TextInput
+            block
             type="password"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
-        </div>
-        <Button variant="primary">Criar cadastro</Button>
-      </form>
-    </DefaultLayout>
+        </FormControl>
+
+        <Stack.Item>
+          <Button type="submit" variant="primary">
+            Criar cadastro
+          </Button>
+        </Stack.Item>
+      </Stack>
+    </form>
   );
 }
 
