@@ -1,4 +1,4 @@
-import { Button, FormControl, Stack, TextInput } from "@primer/react";
+import { Button, FormControl, Heading, Stack, TextInput } from "@primer/react";
 import DefaultLayout from "interface/DefaultLayout";
 import { useState } from "react";
 
@@ -11,8 +11,10 @@ function RegisterPage() {
         description: "Crie sua conta de forma gratuita.",
       }}
     >
-      <h1>Cadastro</h1>
-      <RegisterForm />
+      <Stack gap={"spacious"}>
+        <Heading as="h1">Cadastro</Heading>
+        <RegisterForm />
+      </Stack>
     </DefaultLayout>
   );
 }
