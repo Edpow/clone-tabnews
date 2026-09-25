@@ -1,4 +1,4 @@
-import { Header, PageLayout, Text } from "@primer/react";
+import { Header, Link, PageLayout, Text } from "@primer/react";
 import Head from "next/head";
 import styles from "./index.module.css";
 
@@ -42,6 +42,9 @@ export default function DefaultLayout({
         </PageLayout.Content>
         <PageLayout.Footer divider="line">
           <Text size="small">© {new Date().getFullYear()} TabNews</Text>
+          <Text size="small">
+            <Link href="/status">Status</Link>
+          </Text>
         </PageLayout.Footer>
       </PageLayout>
     </>
