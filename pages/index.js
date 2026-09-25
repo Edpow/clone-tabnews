@@ -1,5 +1,14 @@
-function Home() {
-  return <h1>Rita, eu te amo. Se você me ama, dá uma risadinha!!</h1>;
-}
+import DefaultLayout from "interface/DefaultLayout";
 
-export default Home;
+export default function Home() {
+  return (
+    <DefaultLayout
+      metadata={{
+        title: "Home",
+        description: "Página inicial.",
+      }}
+    >
+      <h1>Home</h1>
+    </DefaultLayout>
+  );
+}
